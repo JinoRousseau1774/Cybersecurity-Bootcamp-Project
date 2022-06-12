@@ -33,7 +33,7 @@ to the network.
 	When a jump box is used, its hidden benefit is that any tools in place for the SAN system are maintained on that single system. Therefore,
 	when an update to the SAN management software is available, only a single system requires the update
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the _____ and system _____.
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the configurations and system logs.
 - _TODO: What does Filebeat watch for?_
 	When a jump box is used, its hidden benefit is that any tools in place for the SAN system are maintained on that single system. Therefore, 
 	when an update to the SAN management software is available, only a single system requires the update
@@ -46,8 +46,8 @@ _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdow
 
 | Name          | Function                 | IP Address    | Operating |
 |---------------|--------------------------|---------------|-----------|
-| Web-1         | Display Web Pages        | 10.1.0.5      | Ubuntu    |
-| Web-2         | Display Web Pages        | 10.1.0.6      | Ubuntu    |
+| Web-1         | DVWA web app			   | 10.1.0.5      | Ubuntu    |
+| Web-2         | DVWA web app             | 10.1.0.6      | Ubuntu    |
 | Jump-Box      | Act as a gateway router  | 10.1.0.4      | Ubuntu    |
 | Load Balancer | Balance the traffic      | 20.28.242.161 | Ubuntu    |
 | Elk Server    | Run File and metric beat | 10.2.0.4      | Ubuntu    |
@@ -56,20 +56,24 @@ _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdow
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the Jump Box machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
+Only the load balancer machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
 - _TODO: Add whitelisted IP addresses_ 114.73.239.111
 
 Machines within the network can only be accessed by SSH.
 - _TODO: Which machine did you allow to access your ELK VM? 
-		What was its IP address?_ 
+		Web-1 10.1.0.5 - Web-2 10.1.0.6
+		What was its IP address? 
+		Private IP: 10.2.0.4 Public IP: 20.70.14.120 
 
 A summary of the access policies in place can be found in the table below.
+| Name          | Publicly Accessible | Allowed IP Address |
+|---------------|---------------------|--------------------|
+| Web-1         | No                  |                    |
+| Web-2         | No                  |                    |
+| Jump-Box      | Yes                 | 114.73.239.111     |
+| Load Balancer | No                  |                    |
+| Elk Server    | No                  |                    |
 
-| Name     | Publicly Accessible | Allowed IP Addresses |
-|----------|---------------------|----------------------|
-| Jump Box | Yes/No              | 10.0.0.1 10.0.0.2    |
-|          |                     |                      |
-|          |                     |                      |
 
 ### Elk Configuration
 
@@ -79,9 +83,13 @@ Ansible was used to automate configuration of the ELK machine. No configuration 
 	Flexible: You can orchestrate the entire application environment no matter where it's deployed
 
 The playbook implements the following tasks:
-- _TODO: In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc._
-- ...
-- ...
+- _TODO: In 3-5 bullets, explain the steps of the ELK installation play. 
+E.g., install Docker; download image; etc._
+- 1st, we need to check if there is an Ansible docker. If there is any, start start and attach it to the Jump Box
+- 2nd, once attached, create a public key from the Jump Box and start creating a new VM, which will become the ELK server
+- 3rd, after the ELK server is set up, add it to the Ansible hosts file and create a new Ansible playbook for the Elk machine
+- 4th, run the Elk.yml file using the ansible-playbook command
+- 5th, test that the playbook is running by browsing to http://20.70.14.120:5601/
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -114,9 +122,30 @@ SSH into the control node and follow the steps below:
 - Run the playbook, and navigate to ____ to check that the installation worked as expected.
 
 _TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
+- _Which file is the playbook? 
+	-filebeat-playbook.yml
+  _Where do you copy it?_
+  	-To the ansible folder
+- _Which file do you update to make Ansible run the playbook on a specific machine?__ 
+	_the filebeat-config.yml
+  _How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
+    _the metricbeat.yml 
+- _Which URL do you navigate to in order to check that the ELK server is running?_
+	_The public IP of the Elk server - http://[ElkServer Public.IP]:5601/app/kibana
 
 _As a **Bonus**, provide the specific commands the user will need to run to download the playbook, 
 	update the files, etc._
+	- curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.1-darwin-x86_64.tar.gz
+tar xzvf filebeat-7.6.1-darwin-x86_64.tar.gz
+	_ Modify the filebeat.yml file 
+		output.elasticsearch:
+  			hosts: ["10.2.0.4:9200"]
+  			username: "elastic"
+  			password: "changeme"
+		setup.kibana:
+  			host: "10.2.0.4:5601"
+  _Install the module with the following commands: 
+  		_modules enable system
+  _Start filebeat with the following command_
+  	_ filebeat setup
+  
