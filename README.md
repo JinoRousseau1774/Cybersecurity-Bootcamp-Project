@@ -60,7 +60,8 @@ Only the Jump Box machine can accept connections from the Internet. Access to th
 - _TODO: Add whitelisted IP addresses_ 114.73.239.111
 
 Machines within the network can only be accessed by SSH.
-- _TODO: Which machine did you allow to access your ELK VM? What was its IP address?_ 
+- _TODO: Which machine did you allow to access your ELK VM? 
+		What was its IP address?_ 
 
 A summary of the access policies in place can be found in the table below.
 
@@ -84,22 +85,28 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![TODO: Update the path with the name of your screenshot of docker ps output](Images/docker_ps_output.png)
+![TODO: Update the path with the name of your screenshot of docker ps output]
+Images/goofy_davinci_docker.png)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
 - _TODO: List the IP addresses of the machines you are monitoring_
+	The Web-1 server with IP address 10.1.0.5
+	The Web-2 server with IP address 10.1.0.6
 
 We have installed the following Beats on these machines:
 - _TODO: Specify which Beats you successfully installed_
+	The filebeat was successfully installed and captured data from Web-1 and web-2
 
 These Beats allow us to collect the following information from each machine:
 - _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
-	Filebeat is a lightweight shipper for forwarding and centralizing log data. Installed as an agent on your servers, Filebeat monitors the log files or locations that you specify, 
+	Filebeat is a lightweight shipper for forwarding and centralizing log data. 
+	Installed as an agent on your servers, Filebeat monitors the log files or locations that you specify, 
 	collects log events, and forwards them either to Elasticsearch or Logstash for indexing
 
 ### Using the Playbook
-In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
+In order to use the playbook, you will need to have an Ansible control node already configured. 
+Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
 - Copy the _____ file to _____.
@@ -111,4 +118,5 @@ _TODO: Answer the following questions to fill in the blanks:_
 - _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
 - _Which URL do you navigate to in order to check that the ELK server is running?
 
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, 
+	update the files, etc._
